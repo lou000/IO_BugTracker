@@ -24,7 +24,7 @@ void SqlWorker::checkDbAndUpdate()
 
 void SqlWorker::updateData()
 {
-    auto q = Queries::setqGetIssues("BugTracker");
+    auto q = Queries::getIssues();
     if(!q.exec())
         qDebug()<<q.lastError();
     QVector<IssueTicket*> temp;
