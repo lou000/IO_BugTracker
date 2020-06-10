@@ -15,12 +15,12 @@ QSqlQuery getIssues();
 QSqlQuery getUsers();
 QSqlQuery getProjects();
 
-QSqlQuery addIssue(IssueType type, QString s_desc, QString desc, Status status, int proj_id);
-QSqlQuery addUser(QString login, QString password, QString name, QString surname, UserPosition position, UserPermission permissions);
+QSqlQuery addIssue(IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status, int proj_id);
+QSqlQuery addUser(QString login, QString password, QString name, QString surname, User::UserPosition position, User::UserPermissionsFlags permissions);
 QSqlQuery addProject(QString name, QString desc);
 
-QSqlQuery updateIssue(int id, IssueType type, QString s_desc, QString desc, Status status, int proj_id, QDateTime dateStatus);
-QSqlQuery updateUser(int id, QString login, QString password, QString name, QString surname, UserPosition position, UserPermission permissions);
+QSqlQuery updateIssue(int id, IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status, int proj_id, QDateTime dateStatus);
+QSqlQuery updateUser(int id, QString login, QString password, QString name, QString surname, User::UserPosition position, User::UserPermissionsFlags permissions);
 QSqlQuery updateProject(int id, QString name, QString desc);
 
 QSqlQuery deleteIssue(int id);

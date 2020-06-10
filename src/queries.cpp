@@ -4,7 +4,7 @@ void Queries::initDb()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC", "BugTracker");
     QString connectString = "Driver={SQL Server};"; // Driver is now {SQL Server}
-    connectString.append("Server=192.168.1.102,1433;"); // IP,Port//128
+    connectString.append("Server=192.168.1.128,1433;"); // IP,Port//128
     connectString.append("Database=IO_Bugtracker;");  // Schema
     connectString.append("Uid=Lewy;");           // User
     connectString.append("Pwd=lol;");           // Pass
@@ -57,7 +57,7 @@ QSqlQuery Queries::getProjects()
     return q;
 }
 
-QSqlQuery Queries::addIssue(IssueType type, QString s_desc, QString desc, Status status, int proj_id)
+QSqlQuery Queries::addIssue(IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status, int proj_id)
 {
     QSqlDatabase db = QSqlDatabase::database("BugTracker");
     if(!db.isValid() || !db.isOpen())
@@ -78,7 +78,7 @@ QSqlQuery Queries::addIssue(IssueType type, QString s_desc, QString desc, Status
 
 
 QSqlQuery Queries::addUser(QString login, QString password, QString name, QString surname,
-                           UserPosition position, UserPermission permissions)
+                           User::UserPosition position, User::UserPermissionsFlags permissions)
 {
     QSqlDatabase db = QSqlDatabase::database("BugTracker");
     if(!db.isValid() || !db.isOpen())
@@ -92,7 +92,7 @@ QSqlQuery Queries::addUser(QString login, QString password, QString name, QStrin
     q.bindValue(":name", name);
     q.bindValue(":surname", surname);
     q.bindValue(":position", position);
-    q.bindValue(":permissions", permissions);
+    q.bindValue(":permissions", static_cast<int>(permissions));
     return q;
 }
 
@@ -103,13 +103,14 @@ QSqlQuery Queries::addProject(QString name, QString desc)
         return QSqlQuery();
     QSqlQuery q(db);
     q.setForwardOnly(true);
-    q.prepare("EXEC IO_BugTracker.dbo.addUser :name, :desc");
+    q.prepare("EXEC IO_BugTracker.dbo.addProject :name, :desc");
     q.bindValue(":name", name);
     q.bindValue(":desc", desc);
     return q;
 }
 
-QSqlQuery Queries::updateIssue(int id, IssueType type, QString s_desc, QString desc, Status status, int proj_id, QDateTime dateStatus)
+QSqlQuery Queries::updateIssue(int id, IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status,
+                               int proj_id, QDateTime dateStatus)
 {
     QSqlDatabase db = QSqlDatabase::database("BugTracker");
     if(!db.isValid() || !db.isOpen())
@@ -128,7 +129,8 @@ QSqlQuery Queries::updateIssue(int id, IssueType type, QString s_desc, QString d
     return q;
 }
 
-QSqlQuery Queries::updateUser(int id, QString login, QString password, QString name, QString surname, UserPosition position, UserPermission permissions)
+QSqlQuery Queries::updateUser(int id, QString login, QString password, QString name, QString surname, User::UserPosition position,
+                              User::UserPermissionsFlags permissions)
 {
     QSqlDatabase db = QSqlDatabase::database("BugTracker");
     if(!db.isValid() || !db.isOpen())
@@ -143,7 +145,7 @@ QSqlQuery Queries::updateUser(int id, QString login, QString password, QString n
     q.bindValue(":name", name);
     q.bindValue(":surname", surname);
     q.bindValue(":position", position);
-    q.bindValue(":permissions", permissions);
+    q.bindValue(":permissions", static_cast<int>(permissions));
     return q;
 }
 
@@ -158,5 +160,41 @@ QSqlQuery Queries::updateProject(int id, QString name, QString desc)
     q.bindValue(":id", id);
     q.bindValue(":name", name);
     q.bindValue(":desc", desc);
+    return q;
+}
+
+QSqlQuery Queries::deleteIssue(int id)
+{
+    QSqlDatabase db = QSqlDatabase::database("BugTracker");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.deleteIssue :id");
+    q.bindValue(":id", id);
+    return q;
+}
+
+QSqlQuery Queries::deleteUser(int id)
+{
+    QSqlDatabase db = QSqlDatabase::database("BugTracker");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.deleteUser :id");
+    q.bindValue(":id", id);
+    return q;
+}
+
+QSqlQuery Queries::deleteProject(int id)
+{
+    QSqlDatabase db = QSqlDatabase::database("BugTracker");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.deleteProject :id");
+    q.bindValue(":id", id);
     return q;
 }

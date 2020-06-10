@@ -19,6 +19,7 @@ SOURCES += \
     external/DarkStyle.cpp \
     external/framelesswindow/framelesswindow.cpp \
     external/framelesswindow/windowdragger.cpp \
+    src/actionwindows.cpp \
     src/bugview.cpp \
     src/issue.cpp \
     src/main.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     external/DarkStyle.h \
     external/framelesswindow/framelesswindow.h \
     external/framelesswindow/windowdragger.h \
+    src/actionwindows.h \
     src/bugview.h \
     src/issue.h \
     src/mainwindow.h \
