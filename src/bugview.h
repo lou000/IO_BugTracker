@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <QTableWidget>
+#include <QAction>
 #include "issue.h"
 #include "threadcontroller.h"
 
@@ -16,10 +17,13 @@ public:
 public:
     BugView(ThreadController* controller, QWidget* parent);
     void fillRows(ViewMode mode);
-    void switchMode(ViewMode m) {mode = m; fillRows(m);}
+    void switchMode(ViewMode m);
+    ViewMode getMode(){return mode;}
 private:
     ViewMode mode = ViewMode::Issue;
     ThreadController* controller;
+signals:
+    void modeChanged(ViewMode mode);
 
 public slots:
     void fillIssues();

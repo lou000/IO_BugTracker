@@ -129,7 +129,7 @@ QSqlQuery Queries::updateIssue(int id, IssueTicket::IssueType type, QString s_de
     return q;
 }
 
-QSqlQuery Queries::updateUser(int id, QString login, QString password, QString name, QString surname, User::UserPosition position,
+QSqlQuery Queries::updateUser(int id, QString name, QString surname, User::UserPosition position,
                               User::UserPermissionsFlags permissions)
 {
     QSqlDatabase db = QSqlDatabase::database("BugTracker");
@@ -137,11 +137,9 @@ QSqlQuery Queries::updateUser(int id, QString login, QString password, QString n
         return QSqlQuery();
     QSqlQuery q(db);
     q.setForwardOnly(true);
-    q.prepare("EXEC IO_BugTracker.dbo.updateUser :id, :login, :password, :name,"
+    q.prepare("EXEC IO_BugTracker.dbo.updateUser :id, :name,"
               " :surname, :position, :permissions" );
     q.bindValue(":id", id);
-    q.bindValue(":login", login);
-    q.bindValue(":password", password);
     q.bindValue(":name", name);
     q.bindValue(":surname", surname);
     q.bindValue(":position", position);
@@ -156,7 +154,7 @@ QSqlQuery Queries::updateProject(int id, QString name, QString desc)
         return QSqlQuery();
     QSqlQuery q(db);
     q.setForwardOnly(true);
-    q.prepare("EXEC IO_BugTracker.dbo.updateUser :id, :name, :desc");
+    q.prepare("EXEC IO_BugTracker.dbo.updateProject :id, :name, :desc");
     q.bindValue(":id", id);
     q.bindValue(":name", name);
     q.bindValue(":desc", desc);
@@ -172,6 +170,7 @@ QSqlQuery Queries::deleteIssue(int id)
     q.setForwardOnly(true);
     q.prepare("EXEC IO_BugTracker.dbo.deleteIssue :id");
     q.bindValue(":id", id);
+    qDebug()<<id;
     return q;
 }
 
@@ -196,5 +195,31 @@ QSqlQuery Queries::deleteProject(int id)
     q.setForwardOnly(true);
     q.prepare("EXEC IO_BugTracker.dbo.deleteProject :id");
     q.bindValue(":id", id);
+    return q;
+}
+
+QSqlQuery Queries::addUserToIssue(int id_user, int id_issue)
+{
+    QSqlDatabase db = QSqlDatabase::database("BugTracker");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.addUserToIssue :user_id, :issue_id");
+    q.bindValue(":user_id", id_user);
+    q.bindValue(":issue_id", id_issue);
+    return q;
+}
+
+QSqlQuery Queries::removeUserFromIssue(int id_user, int id_issue)
+{
+    QSqlDatabase db = QSqlDatabase::database("BugTracker");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.deleteUserFromIssue :user_id, :issue_id");
+    q.bindValue(":user_id", id_user);
+    q.bindValue(":issue_id", id_issue);
     return q;
 }

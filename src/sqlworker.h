@@ -29,6 +29,18 @@ public slots:
     void handleAddUser(const QString &login, const QString &password, const QString &name, const QString &surname,
                        User::UserPosition position, User::UserPermissionsFlags permissions);
     void handleAddProject(const QString name, const QString desc);
+
+    void handleEditIssue(int id, IssueTicket::IssueType type, const QString &s_desc, const QString &desc, IssueTicket::Status status, int proj_id, QDateTime statusDate);
+    void handleEditUser(int id, const QString &name, const QString &surname,
+                       User::UserPosition position, User::UserPermissionsFlags permissions);
+    void handleEditProject(int id, const QString name, const QString desc);
+
+    void handleDeleteIssue(int id);
+    void handleDeleteUser(int id);
+    void handleDeleteProject(int id);
+
+    void handleAddUserToIssue(int id_user, int id_issue);
+    void handleRemoveUserFromIssue(int id_user, int id_issue);
 };
 
 

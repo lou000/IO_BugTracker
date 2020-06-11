@@ -31,6 +31,19 @@ signals:
                  User::UserPosition position, User::UserPermissionsFlags permissions);
     void addProject(const QString name, const QString desc);
 
+    void editIssue(int id, IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status,
+                   int proj_id, QDateTime statusDate);
+    void editUser(int id, const QString &name, const QString &surname, User::UserPosition position,
+                  User::UserPermissionsFlags permissions);
+    void editProject(int id, const QString name, const QString desc);
+
+    void deleteIssue(int id);
+    void deleteUser(int id);
+    void deleteProject(int id);
+
+    void addUserToIssue(int id_user, int id_issue);
+    void removeUserFromIssue(int id_user, int id_issue);
+
 public slots:
     void receiveIssues(const QVector<IssueTicket*> &issues);
     void receiveUsers(const QVector<User *> &users);

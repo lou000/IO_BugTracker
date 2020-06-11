@@ -20,11 +20,14 @@ QSqlQuery addUser(QString login, QString password, QString name, QString surname
 QSqlQuery addProject(QString name, QString desc);
 
 QSqlQuery updateIssue(int id, IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status, int proj_id, QDateTime dateStatus);
-QSqlQuery updateUser(int id, QString login, QString password, QString name, QString surname, User::UserPosition position, User::UserPermissionsFlags permissions);
+QSqlQuery updateUser(int id, QString name, QString surname, User::UserPosition position, User::UserPermissionsFlags permissions);
 QSqlQuery updateProject(int id, QString name, QString desc);
 
 QSqlQuery deleteIssue(int id);
 QSqlQuery deleteUser(int id);
 QSqlQuery deleteProject(int id);
+
+QSqlQuery addUserToIssue(int id_user, int id_issue);
+QSqlQuery removeUserFromIssue(int id_user, int id_issue);
 
 };

@@ -24,7 +24,22 @@ void SqlWorker::checkDbAndUpdate()
 
 void SqlWorker::updateData()
 {
-    auto q = Queries::getIssues();
+    auto q = Queries::getUsers();
+    if(!q.exec())
+        qDebug()<<q.lastError();
+    QVector<User*> temp2;
+
+    while(q.next())
+    {
+        auto user = new User(q.value(0).toInt(), q.value(1).toString(), q.value(2).toString(), q.value(3).toString(),
+                             static_cast<User::UserPosition>(q.value(4).toInt()), static_cast<User::UserPermissionsFlags>(q.value(5).toInt()));
+        temp2.append(user);
+    }
+    q.finish();
+    qDebug()<<"Users Updated!!";
+    emit resultUsers(temp2);
+
+    q = Queries::getIssues();
     if(!q.exec())
         qDebug()<<q.lastError();
     QVector<IssueTicket*> temp;
@@ -45,26 +60,35 @@ void SqlWorker::updateData()
         default:
             break;
         }
+        QVector<User*> programmers;
+        QVector<User*> testers;
+        QVector<User*> menagers;
+        for(QString id : q.value(8).toString().split(", "))
+        {
+            for(auto user : temp2)
+                if(user->id() == id.toInt())
+                    switch (user->position()) {
+                    case User::UserPosition::Programmer:
+                        programmers.append(user);
+                        break;
+                    case User::UserPosition::Tester:
+                        testers.append(user);
+                        break;
+                    case User::UserPosition::Manager:
+                        menagers.append(user);
+                        break;
+                    default:
+                        break;
+                    }
+        }
+        issue->setTesters(testers);
+        issue->setMenagers(menagers);
+        issue->setProgrammers(programmers);
         temp.append(issue);
     }
-    q.finish();
     qDebug()<<"Issues Updated!!";
     emit resultIssues(temp);
-
-    q = Queries::getUsers();
-    if(!q.exec())
-        qDebug()<<q.lastError();
-    QVector<User*> temp2;
-
-    while(q.next())
-    {
-        auto user = new User(q.value(0).toInt(), q.value(1).toString(), q.value(2).toString(), q.value(3).toString(),
-                             static_cast<User::UserPosition>(q.value(5).toInt()), static_cast<User::UserPermissionsFlags>(q.value(4).toInt()));
-        temp2.append(user);
-    }
     q.finish();
-    qDebug()<<"Users Updated!!";
-    emit resultUsers(temp2);
 
     q = Queries::getProjects();
     if(!q.exec())
@@ -102,6 +126,64 @@ void SqlWorker::handleAddUser(const QString &login, const QString &password, con
 void SqlWorker::handleAddProject(const QString name, const QString desc)
 {
     auto q = Queries::addProject(name, desc);
+    q.exec();
+    updateData();
+}
+
+void SqlWorker::handleEditIssue(int id, IssueTicket::IssueType type, const QString &s_desc, const QString &desc, IssueTicket::Status status, int proj_id, QDateTime statusDate)
+{
+    auto q = Queries::updateIssue(id, type, s_desc, desc, status, proj_id, statusDate);
+    if(!q.exec())
+        qDebug()<<q.lastError();
+    updateData();
+}
+
+void SqlWorker::handleEditUser(int id, const QString &name, const QString &surname, User::UserPosition position, User::UserPermissionsFlags permissions)
+{
+    auto q = Queries::updateUser(id, name, surname, position, permissions);
+    if(!q.exec())
+        qDebug()<<q.lastError();
+    updateData();
+}
+
+void SqlWorker::handleEditProject(int id, const QString name, const QString desc)
+{
+    auto q = Queries::updateProject(id, name, desc);
+    q.exec();
+    updateData();
+}
+
+void SqlWorker::handleDeleteIssue(int id)
+{
+    auto q = Queries::deleteIssue(id);
+    q.exec();
+    updateData();
+}
+
+void SqlWorker::handleDeleteUser(int id)
+{
+    auto q = Queries::deleteUser(id);
+    q.exec();
+    updateData();
+}
+
+void SqlWorker::handleDeleteProject(int id)
+{
+    auto q = Queries::deleteProject(id);
+    q.exec();
+    updateData();
+}
+
+void SqlWorker::handleAddUserToIssue(int id_user, int id_issue)
+{
+    auto q = Queries::addUserToIssue(id_user, id_issue);
+    q.exec();
+    updateData();
+}
+
+void SqlWorker::handleRemoveUserFromIssue(int id_user, int id_issue)
+{
+    auto q = Queries::removeUserFromIssue(id_user, id_issue);
     q.exec();
     updateData();
 }

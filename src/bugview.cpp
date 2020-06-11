@@ -8,6 +8,8 @@
 BugView::BugView(ThreadController* cont, QWidget *parent)
     :QTableWidget(parent), controller(cont)
 {
+
+
 }
 
 void BugView::fillRows(ViewMode mode)
@@ -25,6 +27,18 @@ void BugView::fillRows(ViewMode mode)
         for(int i=0; i<controller->issues.length(); i++)
         {
             auto issue = controller->issues.at(i);
+            QString programmers = QString();
+            QString menagers = QString();
+            QString testers = QString();
+            for(auto test : issue->testers())
+                testers.append(test->login() + ", ");
+            testers.chop(2);
+            for(auto men : issue->menagers())
+                menagers.append(men->login() + ", ");
+            menagers.chop(2);
+            for(auto prog : issue->programmers())
+                programmers.append(prog->login() + ", ");
+            programmers.chop(2);
 
             QLabel * label = new QLabel();
             label->setPixmap(IssueTicket::getIconFromIssueType(issue->type()).pixmap(QSize(30,30)));
@@ -37,6 +51,12 @@ void BugView::fillRows(ViewMode mode)
             this->setItem(i, 3, s_desc);
             QTableWidgetItem* desc = new QTableWidgetItem(issue->description());
             this->setItem(i, 4, desc);
+            QTableWidgetItem* u1 = new QTableWidgetItem(menagers);
+            this->setItem(i, 5, u1);
+            QTableWidgetItem* u2 = new QTableWidgetItem(programmers);
+            this->setItem(i, 6, u2);
+            QTableWidgetItem* u3 = new QTableWidgetItem(testers);
+            this->setItem(i, 7, u3);
             QTableWidgetItem* s = new QTableWidgetItem(enumToString<IssueTicket::Status>(issue->status()));
             this->setItem(i, 8, s);
             QTableWidgetItem* dateAdded = new QTableWidgetItem(issue->dateAdded().toString());
@@ -99,6 +119,21 @@ void BugView::fillRows(ViewMode mode)
     default:
         break;
     }
+}
+
+void BugView::switchMode(BugView::ViewMode m)
+{
+    mode = m;
+    fillRows(m);
+    for(auto action : this->actions())
+        if(action->text() == "Add/Remove recources")
+        {
+            if(m == Issue)
+                action->setVisible(true);
+            else
+                action->setVisible(false);
+        }
+    modeChanged(m);
 }
 
 void BugView::fillIssues()
