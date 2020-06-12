@@ -14,7 +14,7 @@
  - qmake
  
  Najprostszą metodą jest instalacjia biblioteki Qt wraz z IDE Qt Creator ze strony: https://www.qt.io/download-qt-installer  
- Następnie w Qt Creator otwieramy plik [IO_Bugtracker\.pro](\IO_BugTracker.pro) zawarty w repozytorium i ustawiamy konfigurację kompilacji.
+ Następnie w Qt Creator otwieramy plik [IO_BugTracker\.pro](IO_BugTracker.pro) zawarty w repozytorium i ustawiamy konfigurację kompilacji.
  
 ## Baza danych.
  W repozytorium zawarty jest plik IO_Bugtracker.bak jest to backup bazy danych SQL Server.  
@@ -25,7 +25,7 @@
  
  Ważne jest aby ustawić na serwerze bazy danych i na samej bazie danych użytkownika z odpowiednimi uprawnieniami i hasło.  
  
- W folderze z którego będziemy uruchamiać **skompilowaną aplikację** należy umieścić plik [SqlConnectionSettings\.txt]  (SqlConnectionSettings.txt).  
+ W folderze z którego będziemy uruchamiać **skompilowaną aplikację** należy umieścić plik [SqlConnectionSettings\.txt](SqlConnectionSettings.txt) .  
  W pliku zawarte są ustawienia połączenia z bazą danych (login, hasło, adres ect.) **które będą wymagały modyfikacji**.  
  W konfiguracji serwera należy ustawić **Server authentication**: SQL Server and Windows Authentication mode.  
  W ustawieniach sieci SQL server należy włączyć protokół TCP/IP http://www.manifold.net/doc/mfd9/enable_tcp_ip_for_sql_server.htm
