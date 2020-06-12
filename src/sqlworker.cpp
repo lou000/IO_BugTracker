@@ -26,7 +26,7 @@ void SqlWorker::updateData()
 {
     auto q = Queries::getUsers();
     if(!q.exec())
-        qDebug()<<q.lastError();
+        infoBox("SQL Error in GetUsers query:" + q.lastError().text());
     QVector<User*> temp2;
 
     while(q.next())
@@ -41,13 +41,13 @@ void SqlWorker::updateData()
 
     q = Queries::getIssues();
     if(!q.exec())
-        qDebug()<<q.lastError();
+        infoBox("SQL Error in GetIssues query:" + q.lastError().text());
     QVector<IssueTicket*> temp;
 
     while(q.next())
     {
         auto type = static_cast<IssueTicket::IssueType>(q.value(1).toInt());
-        class IssueTicket* issue;
+        class IssueTicket* issue = nullptr;
         switch (type)
         {
         case IssueTicket::IssueType::Bug:
@@ -92,7 +92,7 @@ void SqlWorker::updateData()
 
     q = Queries::getProjects();
     if(!q.exec())
-        qDebug()<<q.lastError();
+        infoBox("SQL Error in GetProjects query:" + q.lastError().text());
     QVector<Project*> temp3;
 
     while(q.next())
@@ -110,23 +110,24 @@ void SqlWorker::handleAddIssue(IssueTicket::IssueType type, const QString &s_des
 {
      auto q = Queries::addIssue(type, s_desc, desc, status, proj_id);
      if(!q.exec())
-         qDebug()<<q.lastError();
+         infoBox("SQL Error in addIssue query:" + q.lastError().text());
      updateData();
 }
 
-void SqlWorker::handleAddUser(const QString &login, const QString &password, const QString &name, const QString &surname,
+void SqlWorker::handleAddUser(const QString &login, const QString &name, const QString &surname,
                               User::UserPosition position, User::UserPermissionsFlags permissions)
 {
-    auto q = Queries::addUser(login, password, name, surname, position, permissions);
+    auto q = Queries::addUser(login, name, surname, position, permissions);
     if(!q.exec())
-        qDebug()<<q.lastError();
+        infoBox("SQL Error in addUser query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleAddProject(const QString name, const QString desc)
 {
     auto q = Queries::addProject(name, desc);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in addProject query:" + q.lastError().text());
     updateData();
 }
 
@@ -134,7 +135,7 @@ void SqlWorker::handleEditIssue(int id, IssueTicket::IssueType type, const QStri
 {
     auto q = Queries::updateIssue(id, type, s_desc, desc, status, proj_id, statusDate);
     if(!q.exec())
-        qDebug()<<q.lastError();
+        infoBox("SQL Error in updateIssue query:" + q.lastError().text());
     updateData();
 }
 
@@ -142,48 +143,54 @@ void SqlWorker::handleEditUser(int id, const QString &name, const QString &surna
 {
     auto q = Queries::updateUser(id, name, surname, position, permissions);
     if(!q.exec())
-        qDebug()<<q.lastError();
+        infoBox("SQL Error in updateUser query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleEditProject(int id, const QString name, const QString desc)
 {
     auto q = Queries::updateProject(id, name, desc);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in updateProject query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleDeleteIssue(int id)
 {
     auto q = Queries::deleteIssue(id);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in deleteIssue query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleDeleteUser(int id)
 {
     auto q = Queries::deleteUser(id);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in deleteUser query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleDeleteProject(int id)
 {
     auto q = Queries::deleteProject(id);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in deleteProject query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleAddUserToIssue(int id_user, int id_issue)
 {
     auto q = Queries::addUserToIssue(id_user, id_issue);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in addUserToIssue query:" + q.lastError().text());
     updateData();
 }
 
 void SqlWorker::handleRemoveUserFromIssue(int id_user, int id_issue)
 {
     auto q = Queries::removeUserFromIssue(id_user, id_issue);
-    q.exec();
+    if(!q.exec())
+        infoBox("SQL Error in removeUserFromIssue query:" + q.lastError().text());
     updateData();
 }

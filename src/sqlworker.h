@@ -26,7 +26,7 @@ signals:
 public slots:
     void timerStart() {updateTimer->start(timerInterval); checkDbAndUpdate();}
     void handleAddIssue(IssueTicket::IssueType type, const QString &s_desc, const QString &desc,IssueTicket::Status status, int proj_id);
-    void handleAddUser(const QString &login, const QString &password, const QString &name, const QString &surname,
+    void handleAddUser(const QString &login, const QString &name, const QString &surname,
                        User::UserPosition position, User::UserPermissionsFlags permissions);
     void handleAddProject(const QString name, const QString desc);
 

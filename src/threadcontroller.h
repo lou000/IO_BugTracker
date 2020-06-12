@@ -1,10 +1,13 @@
 ﻿#pragma once
+#include <QMessageBox>
 #include <QThread>
+#include <QFile>
 #include <QObject>
 #include "user.h"
 #include "issue.h"
 #include "project.h"
 #include "sqlworker.h"
+
 
 class ThreadController : public QObject
 {
@@ -27,7 +30,7 @@ signals:
     void updateUsers();
     void updateProjects();
     void addIssue(IssueTicket::IssueType type, QString s_desc, QString desc, IssueTicket::Status status, int proj_id);
-    void addUser(const QString &login, const QString &password, const QString &name, const QString &surname,
+    void addUser(const QString &login, const QString &name, const QString &surname,
                  User::UserPosition position, User::UserPermissionsFlags permissions);
     void addProject(const QString name, const QString desc);
 
@@ -43,6 +46,7 @@ signals:
 
     void addUserToIssue(int id_user, int id_issue);
     void removeUserFromIssue(int id_user, int id_issue);
+
 
 public slots:
     void receiveIssues(const QVector<IssueTicket*> &issues);

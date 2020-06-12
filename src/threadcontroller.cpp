@@ -28,9 +28,9 @@ ThreadController::ThreadController(int timer)
 
     QObject::connect(this, SIGNAL(addIssue(IssueTicket::IssueType, QString, QString, IssueTicket::Status, int)),
                      worker, SLOT(handleAddIssue(IssueTicket::IssueType, QString, QString, IssueTicket::Status, int)));
-    QObject::connect(this, SIGNAL(addUser(const QString, const QString, const QString, const QString,
+    QObject::connect(this, SIGNAL(addUser(const QString, const QString, const QString,
                                                 User::UserPosition, User::UserPermissionsFlags)),
-                     worker, SLOT(handleAddUser(const QString, const QString, const QString, const QString,
+                     worker, SLOT(handleAddUser(const QString, const QString, const QString,
                                                 User::UserPosition, User::UserPermissionsFlags)));
     QObject::connect(this, SIGNAL(addProject(const QString, const QString)),
                      worker, SLOT(handleAddProject(const QString, const QString)));
@@ -59,6 +59,7 @@ ThreadController::ThreadController(int timer)
     emit timerStart();
 }
 
+
 void ThreadController::receiveIssues(const QVector<IssueTicket*> &issues)
 {
     this->issues = issues;
@@ -76,4 +77,13 @@ void ThreadController::receiveProjects(const QVector<Project*> &projects)
     this->projects = projects;
     emit updateProjects();
 }
+
+
+
+
+
+
+
+
+
 

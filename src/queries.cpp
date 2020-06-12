@@ -1,17 +1,32 @@
 ﻿#include "queries.h"
+#include <QSqlError>
+
 
 void Queries::initDb()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC", "BugTracker");
-    QString connectString = "Driver={SQL Server};"; // Driver is now {SQL Server}
-    connectString.append("Server=192.168.1.128,1433;"); // IP,Port//128
-    connectString.append("Database=IO_Bugtracker;");  // Schema
-    connectString.append("Uid=Lewy;");           // User
-    connectString.append("Pwd=lol;");           // Pass
-    db.setDatabaseName(connectString);
+    db.setDatabaseName(QString::fromStdString(_sqlConnectionString));
     if (!db.open())
     {
-        qDebug() << "IO_Bugtracker Database: ERROR connection with database fail";
+        infoBox("IO_Bugtracker Database connection fail with string:\n"
+                + QString::fromStdString(_sqlConnectionString) +
+                "\n\n"+"The error was :\n" + db.lastError().text());
+    }
+    else
+    {
+        qDebug() << "IO_Bugtracker Database: connection ok";
+    }
+}
+
+void Queries::initDb(const QString &connectionName)
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC", connectionName);
+    db.setDatabaseName(QString::fromStdString(_sqlConnectionString));
+    if (!db.open())
+    {
+        infoBox("IO_Bugtracker Database connection fail with string:\n"
+                + QString::fromStdString(_sqlConnectionString) +
+                "\n\n"+"The error was :\n" + db.lastError().text());
     }
     else
     {
@@ -77,7 +92,7 @@ QSqlQuery Queries::addIssue(IssueTicket::IssueType type, QString s_desc, QString
 }
 
 
-QSqlQuery Queries::addUser(QString login, QString password, QString name, QString surname,
+QSqlQuery Queries::addUser(QString login, QString name, QString surname,
                            User::UserPosition position, User::UserPermissionsFlags permissions)
 {
     QSqlDatabase db = QSqlDatabase::database("BugTracker");
@@ -85,10 +100,8 @@ QSqlQuery Queries::addUser(QString login, QString password, QString name, QStrin
         return QSqlQuery();
     QSqlQuery q(db);
     q.setForwardOnly(true);
-    q.prepare("EXEC IO_BugTracker.dbo.addUser :login, :password, :name,"
-              " :surname, :position, :permissions" );
+    q.prepare("EXEC IO_BugTracker.dbo.addUser :login, :name, :surname, :position, :permissions" );
     q.bindValue(":login", login);
-    q.bindValue(":password", password);
     q.bindValue(":name", name);
     q.bindValue(":surname", surname);
     q.bindValue(":position", position);
@@ -221,5 +234,31 @@ QSqlQuery Queries::removeUserFromIssue(int id_user, int id_issue)
     q.prepare("EXEC IO_BugTracker.dbo.deleteUserFromIssue :user_id, :issue_id");
     q.bindValue(":user_id", id_user);
     q.bindValue(":issue_id", id_issue);
+    return q;
+}
+
+QSqlQuery Queries::getUserPassword(const QString &login)
+{
+    QSqlDatabase db = QSqlDatabase::database("login");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.getUserPassword :login");
+    q.bindValue(":login", login);
+    return q;
+}
+
+QSqlQuery Queries::setUserPassword(const QString &login, const QString &hash, const QString &salt)
+{
+    QSqlDatabase db = QSqlDatabase::database("login");
+    if(!db.isValid() || !db.isOpen())
+        return QSqlQuery();
+    QSqlQuery q(db);
+    q.setForwardOnly(true);
+    q.prepare("EXEC IO_BugTracker.dbo.setUserPassword :login, :hash, :salt");
+    q.bindValue(":login", login);
+    q.bindValue(":hash", hash);
+    q.bindValue(":salt", salt);
     return q;
 }

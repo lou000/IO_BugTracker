@@ -62,7 +62,6 @@ private:
     QPushButton* addUserToIssueDiscard;
 
 
-    void infoBox(const QString &str);
     void initIssueWindow();
     void initUserWindow();
     void initProjectWindow();

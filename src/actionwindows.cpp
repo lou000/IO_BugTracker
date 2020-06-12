@@ -12,15 +12,6 @@ ActionWindows::ActionWindows(QWidget* parent, ThreadController* controller)
     initAddUserToIssue();
 }
 
-void ActionWindows::infoBox(const QString &str)
-{
-    QMessageBox msgbox;
-    msgbox.setText(str);
-    msgbox.setWindowFlag(Qt::WindowStaysOnTopHint);
-    msgbox.exec();
-    msgbox.raise();
-}
-
 void ActionWindows::initIssueWindow()
 {
     this->issueWindow = new QDockWidget(this->parentWidget());
@@ -255,7 +246,7 @@ void ActionWindows::initUserWindow()
                 if(userPermissions.at(i)->checkState()==2)
                     flags |= static_cast<User::UserPermission>(permissionsMetaEnum.value(i));
             }
-            emit controller->addUser(userLogin->text(), QString(), userName->text(), userSurname->text(),
+            emit controller->addUser(userLogin->text(), userName->text(), userSurname->text(),
                                      stringToEnum<User::UserPosition>(userPosition->currentText()),
                                      flags);
             userLogin->clear();
