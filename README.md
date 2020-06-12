@@ -15,6 +15,7 @@
  
  Najprostszą metodą jest instalacjia biblioteki Qt wraz z IDE Qt Creator ze strony: https://www.qt.io/download-qt-installer  
  Następnie w Qt Creator otwieramy plik [IO_BugTracker\.pro](IO_BugTracker.pro) zawarty w repozytorium i ustawiamy konfigurację kompilacji.
+ Skrót Ctrl+R powinien zbudować i uruchomić aplikację.
  
 ## Baza danych.
  W repozytorium zawarty jest plik IO_Bugtracker.bak jest to backup bazy danych SQL Server.  
@@ -42,11 +43,18 @@
 ## Screenshoty oraz krótka prezentacja funkcjonalności.
 
 ### Ekran logowania:
-![image]()
+![image](screenshots/login.png)
 
 ### Ekran zmiany hasła:
-![image]()
+![image](screenshots/password_change.png)
 
+### Widok główny:
+![image](screenshots/issues.png)
+
+## Film opisujący funkcjonalność:
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=wUpJ3oQXcVg
+" target="_blank"><img src="http://img.youtube.com/vi/wUpJ3oQXcVg/0.jpg" 
+alt="Projekt IO" width="640" height="480" border="10" /></a>
 
 
  
