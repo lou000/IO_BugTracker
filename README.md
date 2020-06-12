@@ -14,7 +14,7 @@
  - qmake
  
  Najprostszą metodą jest instalacjia biblioteki Qt wraz z IDE Qt Creator ze strony: https://www.qt.io/download-qt-installer  
- Następnie w Qt Creator otwieramy plik [IO_Bugtracker\.pro](IO_Bugtracker.pro) zawarty w repozytorium i ustawiamy konfigurację kompilacji.
+ Następnie w Qt Creator otwieramy plik [IO_Bugtracker\.pro](\IO_BugTracker.pro) zawarty w repozytorium i ustawiamy konfigurację kompilacji.
  
 ## Baza danych.
  W repozytorium zawarty jest plik IO_Bugtracker.bak jest to backup bazy danych SQL Server.  
