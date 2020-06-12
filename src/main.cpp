@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     MainWindow* window = new MainWindow(framelessWindow);
     framelessWindow->setContent(window);
     framelessWindow->setWindowTitle(window->windowTitle());
-    QFont font = QFont("Calibri", 10);
+    QFont font = QFont("Calibri", 12);
     a.setFont(font);
     QObject::connect(window, &MainWindow::move, framelessWindow, [=](int x, int y)
     {

@@ -12,6 +12,7 @@ void MainWindow::login()
 {
     auto mainwidget = new QWidget(this);
     window->setContent(mainwidget);
+    window->setWindowTitle("Login  -  BugTracker");
     auto layout = new QVBoxLayout();
     mainwidget->setLayout(layout);
     auto login = new QLineEdit(mainwidget);
@@ -69,7 +70,7 @@ void MainWindow::changePassword(const QString &login)
     QFont font = QFont("Verdana");
     font.setPointSize(14);
 
-    auto text = new QLabel("This is your first login, please setup a password.");
+    auto text = new QLabel(" This is your first login,\nplease setup a password.");
     text->setFont(font);
     text->setStyleSheet("QLabel { color : grey; }");
 
