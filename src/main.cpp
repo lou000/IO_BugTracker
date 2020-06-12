@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     FramelessWindow* framelessWindow = new FramelessWindow();
     MainWindow* window = new MainWindow(framelessWindow);
     framelessWindow->setContent(window);
-    framelessWindow->setWindowTitle(window->windowTitle());
+    framelessWindow->setWindowTitle("BugTracker   -   Project IO   -   by Lewicki Maciej and Jakub Kościołowski");
     QFont font = QFont("Calibri", 12);
     a.setFont(font);
     QObject::connect(window, &MainWindow::move, framelessWindow, [=](int x, int y)

@@ -355,7 +355,6 @@ void MainWindow::init()
     setCentralWidget(mainView);
     addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, leftBar);
     setWindowIcon(QIcon());
-    this->setWindowTitle("BugTracker   -   Project IO   -   by Lewicki Maciej and Jakub Kościołowski");
     this->setFixedSize(QSize(1800, 900));
     this->setContentsMargins(10, 10, 10, 10);
     QScreen* mainScreen = QApplication::screens().at(0);

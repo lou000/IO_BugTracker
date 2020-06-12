@@ -144,7 +144,7 @@ void ActionWindows::showIssueWindow(IssueTicket* issue)
         issueAccept->disconnect();
         QObject::connect(issueAccept, &QPushButton::clicked, this, [=]
             {
-            if(issueShortDesc->toPlainText().length()<1 || issueStatus->currentIndex()==-1 || issueType->currentIndex()==-1)
+            if(issueShortDesc->toPlainText().length()<1 || issueStatus->currentIndex()==-1 || issueType->currentIndex()==-1 || issueProjName->currentIndex()==-1)
                 infoBox("Please fill out all the required fields.");
             else
             {
