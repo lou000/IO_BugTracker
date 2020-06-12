@@ -1,7 +1,7 @@
 # IO_BugTracker
  Projekt na zajęcia z Inżynierii Oprogramowania ZUT
  
- W repozytorium znajdują się wszystkie pliki potrzebne do kompilacji kodu.  
+ W repozytorium znajdują się wszystkie pliki potrzebne do kompilacji kodu wraz z dokumentacją.
  
  W folderze [release](/release) znajduje się gotowa aplikacja na wypadek gdyby kompilacja sprawiła trudności.  
 
